@@ -8,6 +8,6 @@ namespace ERP.Service.Services
 {
     public class OperationWorkforceService
     {
-
+        public int MyProperty { get; set; }
     }
 }
