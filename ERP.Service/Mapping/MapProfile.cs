@@ -49,7 +49,14 @@ namespace ERP.Service.Mapping
             CreateMap<SelectUserDto, User>();
             CreateMap<User, SelectUserDto>();
 
+            CreateMap<OperationDto, ProductionOperation>();
+            CreateMap<ProductionOperation, OperationDto>();
             
+            CreateMap<SelectWorkforceDto, Workforce>();
+            CreateMap<Workforce, SelectWorkforceDto>();
+            
+            CreateMap<OperationWorkforceDto, OperationWorkforce>();
+            CreateMap<OperationWorkforce, OperationWorkforceDto>();
 
         }
     }
