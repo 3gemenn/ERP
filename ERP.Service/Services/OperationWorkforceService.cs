@@ -95,5 +95,41 @@ namespace ERP.Service.Services
             }
 
         }
+        public async Task<CustomResponseDto<NoContentDto>> Update(OperationWorkforceDto dto)
+        {
+            var operationWorkforce = _mapper.Map<OperationWorkforce>(dto);
+            if (operationWorkforce == null)
+            {
+                return CustomResponseDto<NoContentDto>.Fail(404, "Product not found");
+            }
+
+            var update = await _repository.UpdateAsync(operationWorkforce);
+            if (update.Success)
+            {
+                var updatedDto = _mapper.Map<OperationWorkforceDto>(operationWorkforce);
+                return CustomResponseDto<NoContentDto>.Success(200);
+            }
+            else
+            {
+                return CustomResponseDto<NoContentDto>.Fail(400, "Güncelleştirme işlemi yapılamadı");
+            }
+
+        }
+
+        public async Task<CustomResponseDto<NoContentDto>> Delete(string id)
+        {
+            var operationWorkforce = _repository.Where(x => x.Id == id).FirstOrDefault();
+            if (operationWorkforce == null)
+            {
+                return CustomResponseDto<NoContentDto>.Fail(404, "Product not found");
+            }
+
+            var delete = await _repository.RemoveAsync(operationWorkforce);
+            if (!delete.Success)
+            {
+                return CustomResponseDto<NoContentDto>.Fail(404, "Silme işlemi başarısız oldu");
+            }
+            return CustomResponseDto<NoContentDto>.Success(200);
+        }
     }
 }

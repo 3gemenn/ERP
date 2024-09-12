@@ -29,41 +29,11 @@ namespace ERP.Service.Services
             _pro = pro;
             _mat = mat;
         }
-
-        public async Task<CustomResponseDto<NoContentDto>> Create(ProductMaterialDto dto)
+        public async Task<CustomResponseDto<List<ProductMaterialDto>>> ProductMaterials()
         {
-            try
-            {
-                List<ProductMaterial> list= new List<ProductMaterial>();
-                foreach (var item in dto.Materials)
-                {
-                    var productMaterial = new ProductMaterial()
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        ProductId = dto.ProductId,
-                        MaterialId = item.Id,
-                        Quantity = item.Quantity,
-                    };
-                    list.Add(productMaterial);
-                    
-                }
-                var add = await _repository.AddRangeAsync(list);
-
-                if (add.Success)
-                {
-                    return CustomResponseDto<NoContentDto>.Success(200);
-                }
-                else
-                {
-                    return CustomResponseDto<NoContentDto>.Fail(400,"kayıt edilemedi");
-                }
-            }
-            catch (Exception ex)
-            {
-
-                return CustomResponseDto<NoContentDto>.Fail(400, ex.Message);
-            }
-
+            var productMaterials = _repository.GetAll().ToList();
+            var mapper = _mapper.Map<List<ProductMaterialDto>>(productMaterials);
+            return CustomResponseDto<List<ProductMaterialDto>>.Success(200, mapper);
         }
 
         public async Task<CustomResponseDto<List<SelectProductDto>>>SProduct()
@@ -97,7 +67,77 @@ namespace ERP.Service.Services
                 return CustomResponseDto<List<SelectMaterialDto>>.Fail(500, ex.Message);
             }
         }
+        public async Task<CustomResponseDto<NoContentDto>> Create(ProductMaterialDto dto)
+        {
+            try
+            {
+                List<ProductMaterial> list = new List<ProductMaterial>();
+                foreach (var item in dto.Materials)
+                {
+                    var productMaterial = new ProductMaterial()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        ProductId = dto.ProductId,
+                        MaterialId = item.Id,
+                        Quantity = item.Quantity,
+                    };
+                    list.Add(productMaterial);
 
+                }
+                var add = await _repository.AddRangeAsync(list);
 
+                if (add.Success)
+                {
+                    return CustomResponseDto<NoContentDto>.Success(200);
+                }
+                else
+                {
+                    return CustomResponseDto<NoContentDto>.Fail(400, "kayıt edilemedi");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return CustomResponseDto<NoContentDto>.Fail(400, ex.Message);
+            }
+
+        }
+
+        public async Task<CustomResponseDto<NoContentDto>> Update(ProductMaterialDto dto)
+        {
+            var productMaterial = _mapper.Map<ProductMaterial>(dto);
+            if (productMaterial == null)
+            {
+                return CustomResponseDto<NoContentDto>.Fail(404, "Product not found");
+            }
+
+            var update = await _repository.UpdateAsync(productMaterial);
+            if (update.Success)
+            {
+                var updatedDto = _mapper.Map<ProductMaterialDto>(productMaterial);
+                return CustomResponseDto<NoContentDto>.Success(200);
+            }
+            else
+            {
+                return CustomResponseDto<NoContentDto>.Fail(400, "Güncelleştirme işlemi yapılamadı");
+            }
+
+        }
+
+        public async Task<CustomResponseDto<NoContentDto>> Delete(string id)
+        {
+            var productMaterial = _repository.Where(x => x.Id == id).FirstOrDefault();
+            if (productMaterial == null)
+            {
+                return CustomResponseDto<NoContentDto>.Fail(404, "Product not found");
+            }
+
+            var delete = await _repository.RemoveAsync(productMaterial);
+            if (!delete.Success)
+            {
+                return CustomResponseDto<NoContentDto>.Fail(404, "Silme işlemi başarısız oldu");
+            }
+            return CustomResponseDto<NoContentDto>.Success(200);
+        }
     }
 }

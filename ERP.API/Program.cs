@@ -28,6 +28,7 @@ builder.Services.AddScoped<IGenericRepository<ProductMaterial>, GenericRepositor
 builder.Services.AddScoped<IGenericRepository<WorkOrder>, GenericRepository<WorkOrder>>();
 builder.Services.AddScoped<IGenericRepository<ProductionOperation>, GenericRepository<ProductionOperation>>();
 builder.Services.AddScoped<IGenericRepository<Workforce>, GenericRepository<Workforce>>();
+builder.Services.AddScoped<IGenericRepository<OperationWorkforce>, GenericRepository<OperationWorkforce>>();
 
 builder.Services.AddScoped<IProductService,ProductService>();
 builder.Services.AddScoped<IMaterialService,MaterialService>();
@@ -36,6 +37,7 @@ builder.Services.AddScoped<IWorkOrderService, WorkOrderService>();
 builder.Services.AddScoped<IProductionOperationService, ProductionOperationService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IWorkforceService, WorkforceService>();
+builder.Services.AddScoped<IOperationWorkforceService, OperationWorkforceService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddAutoMapper(typeof(MapProfile));

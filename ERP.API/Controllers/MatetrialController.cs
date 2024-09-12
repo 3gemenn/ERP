@@ -1,6 +1,7 @@
 ﻿using ERP.Core.Dtos;
 using ERP.Core.Services;
 using ERP.Service.Services;
+using ERP.Service.Validations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,8 +26,9 @@ namespace ERP.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Create(MaterialDto dto)
-        {
-            return Ok(await _materialService.Create(dto));
+        {  
+                return Ok(await _materialService.Create(dto));
+          
         }
 
         [HttpPut]

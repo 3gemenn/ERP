@@ -17,7 +17,11 @@ namespace ERP.API.Controllers
             _productMaterialService = productMaterialService;
 
         }
-
+        [HttpGet]
+        public async Task<IActionResult> ProductMaterials()
+        {
+            return Ok(await _productMaterialService.ProductMaterials());
+        }
         [HttpGet]
         public async Task<IActionResult> SelectProduct()
         {
@@ -33,6 +37,21 @@ namespace ERP.API.Controllers
         public async Task<IActionResult> Create(ProductMaterialDto dto)
         {
             return Ok(await _productMaterialService.Create(dto));
+        }
+        [HttpPut]
+        public async Task<IActionResult> Update(ProductMaterialDto dto)
+        {
+            return Ok(await _productMaterialService.Update(dto));
+        }
+        [HttpDelete]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var result = await _productMaterialService.Delete(id);
+            if (result.StatusCode == 200)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }

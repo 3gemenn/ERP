@@ -41,5 +41,21 @@ namespace ERP.API.Controllers
         {
             return Ok(await _workforceService.Create(dto));
         }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(WorkforceDto dto)
+        {
+            return Ok(await _workforceService.Update(dto));
+        }
+        [HttpDelete]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var result = await _workforceService.Delete(id);
+            if (result.StatusCode == 200)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }

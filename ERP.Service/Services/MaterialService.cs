@@ -5,6 +5,7 @@ using ERP.Core.Repositories;
 using ERP.Core.Services;
 using ERP.Core.UnitOfWorks;
 using ERP.Repository.UnitOfWorks;
+using ERP.Service.Validations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,14 @@ namespace ERP.Service.Services
 
         public async Task<CustomResponseDto<NoContentDto>> Create(MaterialDto dto)
         {
+            var validator = new MaterialValidator();
+            var validationResult = validator.Validate(dto);
+            if (!validationResult.IsValid)
+            {
+                var errorMessages = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return CustomResponseDto<NoContentDto>.Fail(400, errorMessages);
+            }
+
             var newDto = _mapper.Map<Material>(dto);
             newDto.Id = Guid.NewGuid().ToString();
            
@@ -48,6 +57,13 @@ namespace ERP.Service.Services
         }
         public async Task<CustomResponseDto<NoContentDto>> Update(MaterialDto dto)
         {
+            var validator = new MaterialValidator();
+            var validationResult = validator.Validate(dto);
+            if (!validationResult.IsValid)
+            {
+                var errorMessages = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return CustomResponseDto<NoContentDto>.Fail(400, errorMessages);
+            }
             var material = _mapper.Map<Material>(dto);
             if (material == null)
             {

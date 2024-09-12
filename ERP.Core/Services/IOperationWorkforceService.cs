@@ -14,5 +14,7 @@ namespace ERP.Core.Services
         Task<CustomResponseDto<List<OperationDto>>> SOperation();
         Task<CustomResponseDto<List<SelectWorkforceDto>>> SWorkforce();
         Task<CustomResponseDto<NoContentDto>> Create(OperationWorkforceDto dto);
+        Task<CustomResponseDto<NoContentDto>> Update(OperationWorkforceDto dto);
+        Task<CustomResponseDto<NoContentDto>> Delete(string id);
     }
 }
